@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 import time
 import RPi.GPIO as GPIO
 
@@ -7,7 +8,7 @@ PIN_CLK = 2
 PIN_DAT = [3,14]
 PIN_CS  = 4
 delay = 0.0000005
-ns = 2 # number of sensors attached
+ns = 1 # number of sensors attached
 # totally 10 bits to be extracted from SSI signal
 bitcount = 16
 
