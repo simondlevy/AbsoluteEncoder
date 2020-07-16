@@ -19,12 +19,12 @@ try:
     GPIO.output(PIN_CS,1)
     GPIO.output(PIN_CLK,1)
 except:
-    print "ERROR. Unable to setup the configuration requested"                                     
+    print("ERROR. Unable to setup the configuration requested")
 
 #wait some time to start
 time.sleep(0.5)
 
-print "GPIO configuration enabled"
+print("GPIO configuration enabled")
 
 def clockup():
     GPIO.output(PIN_CLK,1)
@@ -42,7 +42,7 @@ def readpos():
     
     for i in range(0,bitcount):
         if i<10:
-            #print i
+            #print(i)
             clockup()
             for j in range(0,ns):
                 data[j]<<=1  
@@ -57,10 +57,10 @@ def readpos():
 
 try:
     while(1):
-        print readpos()
+        print(readpos())
         time.sleep(0.001)
         #break
         
 finally:
-    print "cleaning up GPIO"
+    print("cleaning up GPIO")
     GPIO.cleanup()
