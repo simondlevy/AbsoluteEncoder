@@ -1,64 +1,38 @@
-// For Teensy 3.2
-static const uint8_t PIN_CLK = 23;
-static const uint8_t PIN_DAT = 22;
-static const uint8_t PIN_CS  = 21;
+// https://forum.arduino.cc/index.php?topic=110250.0
 
-static void clockup(void)
-{
-    digitalWrite(PIN_CLK, HIGH);
+const int PIN_CS = 5;
+const int PIN_CLOCK = 6;
+const int PIN_DATA = 7;
+
+void setup() {
+  Serial.begin(115200);
+  pinMode(PIN_CS, OUTPUT);
+  pinMode(PIN_CLOCK, OUTPUT);
+  pinMode(PIN_DATA, INPUT);
+
+  digitalWrite(PIN_CLOCK, HIGH);
+  digitalWrite(PIN_CS, LOW);
 }
 
-static void clockdown(void)
-{
-    digitalWrite(PIN_CLK, LOW);
-}
 
-static void MSB(void)
-{
-    // Most Significant Bit
-    clockdown();
-}
+//byte stream[16];
+void loop() {
 
-static uint16_t readpos(void)
-{
-    digitalWrite(PIN_CS, LOW);
-    //delayMicroseconds(1);
-    MSB();
-
-    uint16_t data = 0;
-
-    for (uint i=0; i<16; ++i) {
-        if (i<10) {
-            clockup();
-            data <<= 1;
-            data |= (uint16_t)digitalRead(PIN_DAT);
-            clockdown();
-        }
-        else {
-            for (uint8_t k=0; k<6; ++k) { 
-                clockup();
-                clockdown();
-            }
-        }
-    }
-
-    digitalWrite(PIN_CS, HIGH);
-
-    return data;
-}
-
-void setup(void)
-{
-    Serial.begin(115200);
-
-    pinMode(PIN_CLK, OUTPUT);
-    pinMode(PIN_DAT, INPUT);
-    pinMode(PIN_CS,  OUTPUT);
-
-    delay(500);
-}
-
-void loop(void)
-{
-    Serial.println(readpos());
+  digitalWrite(PIN_CS, HIGH);
+  digitalWrite(PIN_CS, LOW);
+  int pos = 0;
+  for (int i=0; i<10; i++) {
+    digitalWrite(PIN_CLOCK, LOW);
+    digitalWrite(PIN_CLOCK, HIGH);
+   
+    byte b = digitalRead(PIN_DATA) == HIGH ? 1 : 0;
+    pos += b * pow(2, 10-(i+1));
+  }
+  for (int i=0; i<6; i++) {
+    digitalWrite(PIN_CLOCK, LOW);
+    digitalWrite(PIN_CLOCK, HIGH);
+  }
+  digitalWrite(PIN_CLOCK, LOW);
+  digitalWrite(PIN_CLOCK, HIGH);
+  Serial.println(pos);
 }
