@@ -7,6 +7,7 @@ static void clockup(void)
 {
     digitalWrite(PIN_CLK, HIGH);
 }
+
 static void clockdown(void)
 {
     digitalWrite(PIN_CLK, LOW);
@@ -20,10 +21,8 @@ static void MSB(void)
 
 static uint16_t readpos(void)
 {
-    return millis();
-
     digitalWrite(PIN_CS, LOW);
-    delayMicroseconds(1);
+    //delayMicroseconds(1);
     MSB();
 
     uint16_t data = 0;
@@ -32,7 +31,7 @@ static uint16_t readpos(void)
         if (i<10) {
             clockup();
             data <<= 1;
-            data |= digitalRead(PIN_DAT);
+            data |= (uint16_t)digitalRead(PIN_DAT);
             clockdown();
         }
         else {
@@ -52,17 +51,14 @@ void setup(void)
 {
     Serial.begin(115200);
 
-    //pinMode(PIN_CLK, OUTPUT);
-    //pinMode(PIN_DAT, INPUT);
-    //pinMode(PIN_CS,  OUTPUT);
+    pinMode(PIN_CLK, OUTPUT);
+    pinMode(PIN_DAT, INPUT);
+    pinMode(PIN_CS,  OUTPUT);
 
     delay(500);
 }
 
 void loop(void)
 {
-    //Serial.println(readpos());
-    //delay(1);
-
-    Serial.println(millis());
+    Serial.println(readpos());
 }
