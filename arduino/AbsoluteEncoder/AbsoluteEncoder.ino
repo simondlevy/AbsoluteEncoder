@@ -20,25 +20,31 @@ static void MSB(void)
 
 static uint16_t readpos(void)
 {
+    return millis();
+
     digitalWrite(PIN_CS, LOW);
     delayMicroseconds(1);
     MSB();
+
     uint16_t data = 0;
-    /* 
-    for i in range(0,bitcount):
-        if i<10:
-            #print(i)
-            clockup()
-            for j in range(0,ns):
-                data[j]<<=1  
-                data[j]|=GPIO.input(PIN_DAT[j])
-            clockdown()
-        else:
-            for k in range(0,6):
-                clockup()
-                clockdown()
-    GPIO.output(PIN_CS,1)
-    */
+
+    for (uint i=0; i<16; ++i) {
+        if (i<10) {
+            clockup();
+            data <<= 1;
+            data |= digitalRead(PIN_DAT);
+            clockdown();
+        }
+        else {
+            for (uint8_t k=0; k<6; ++k) { 
+                clockup();
+                clockdown();
+            }
+        }
+    }
+
+    digitalWrite(PIN_CS, HIGH);
+
     return data;
 }
 
@@ -46,14 +52,17 @@ void setup(void)
 {
     Serial.begin(115200);
 
-    pinMode(PIN_CLK, OUTPUT);
-    pinMode(PIN_DAT, INPUT);
-    pinMode(PIN_CS,  OUTPUT);
+    //pinMode(PIN_CLK, OUTPUT);
+    //pinMode(PIN_DAT, INPUT);
+    //pinMode(PIN_CS,  OUTPUT);
 
     delay(500);
 }
 
 void loop(void)
 {
+    //Serial.println(readpos());
+    //delay(1);
+
     Serial.println(millis());
 }
