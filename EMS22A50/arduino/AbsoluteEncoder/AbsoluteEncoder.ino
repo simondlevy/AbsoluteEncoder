@@ -4,12 +4,6 @@ static const uint8_t PIN_CS    = 5;
 static const uint8_t PIN_CLOCK = 6;
 static const uint8_t PIN_DATA  = 7;
 
-static void pulseClock(void)
-{
-    digitalWrite(PIN_CLOCK, LOW);
-    digitalWrite(PIN_CLOCK, HIGH);
-}   
-
 void setup(void) 
 {
     Serial.begin(115200);
@@ -32,18 +26,13 @@ void loop(void)
 
     for (uint8_t i=0; i<10; i++) {
 
-        pulseClock();
+        digitalWrite(PIN_CLOCK, LOW);
+        digitalWrite(PIN_CLOCK, HIGH);
 
         uint8_t b = digitalRead(PIN_DATA) == HIGH ? 1 : 0;
-        pos += b * pow(2, 10-(i+1));
+
+        pos |= b<<(10-(i+1));
     }
-
-    for (uint8_t i=0; i<6; i++) {
-
-        pulseClock();
-    }
-
-    pulseClock();
 
     Serial.println(pos);
 }
