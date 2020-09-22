@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+# https://hareshmiriyala.wordpress.com/2018/02/19/interfacing-an-absolute-encoder-to-raspberry-pi/
 import time
 import RPi.GPIO as GPIO
 
