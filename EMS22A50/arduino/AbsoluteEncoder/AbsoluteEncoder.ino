@@ -1,8 +1,8 @@
 // https://forum.arduino.cc/index.php?topic=110250.0
 
-const int PIN_CS    = 5;
-const int PIN_CLOCK = 6;
-const int PIN_DATA  = 7;
+static const uint8_t PIN_CS    = 5;
+static const uint8_t PIN_CLOCK = 6;
+static const uint8_t PIN_DATA  = 7;
 
 static void pulseClock(void)
 {
@@ -34,7 +34,7 @@ void loop(void)
 
         pulseClock();
 
-        byte b = digitalRead(PIN_DATA) == HIGH ? 1 : 0;
+        uint8_t b = digitalRead(PIN_DATA) == HIGH ? 1 : 0;
         pos += b * pow(2, 10-(i+1));
     }
 
