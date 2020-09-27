@@ -16,6 +16,11 @@ void setup(void)
     digitalWrite(PIN_CS, LOW);
 }
 
+static void pulseClock(void)
+{
+    digitalWrite(PIN_CLOCK, LOW);
+    digitalWrite(PIN_CLOCK, HIGH);
+}
 
 void loop(void) 
 {
@@ -24,14 +29,19 @@ void loop(void)
 
     uint16_t pos = 0;
 
+    // Read 10 data bits
     for (uint8_t i=0; i<10; i++) {
 
-        digitalWrite(PIN_CLOCK, LOW);
-        digitalWrite(PIN_CLOCK, HIGH);
+        pulseClock();
 
         uint8_t b = digitalRead(PIN_DATA) == HIGH ? 1 : 0;
 
         pos |= b<<(10-(i+1));
+    }
+
+    // Read and ignore 6 status bits
+    for (int i=0; i<6; i++) {
+        pulseClock();
     }
 
     Serial.println(pos);
