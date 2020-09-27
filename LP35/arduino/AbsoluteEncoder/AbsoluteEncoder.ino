@@ -16,12 +16,6 @@ static void clockLow(void)
     digitalWrite(PIN_CLK_POS, LOW);
 }
 
-static void clockPulse(void)
-{
-    clockLow();
-    clockHigh();
-}
-
 void setup(void) 
 {
     Serial.begin(115200);
@@ -30,9 +24,7 @@ void setup(void)
     pinMode(PIN_CLK_POS, OUTPUT);
     pinMode(PIN_DATA, INPUT);
 
-    clockHigh();
 }
-
 
 void loop(void) 
 {
@@ -40,17 +32,13 @@ void loop(void)
 
     for (uint8_t i=0; i<10; i++) {
 
-        clockPulse();
+        clockLow();
 
         uint8_t b = digitalRead(PIN_DATA) == HIGH ? 1 : 0;
         pos += b * pow(2, 10-(i+1));
-    }
 
-    for (uint8_t i=0; i<6; i++) {
-        clockPulse();
+        clockHigh();
     }
-
-    clockPulse();
 
     Serial.println(pos);
 }
